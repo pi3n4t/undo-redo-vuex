@@ -8,7 +8,9 @@
   </div>
 </template>
 
-<style lang="scss">
+<style postcss>
+@import "suitcss-components";
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -43,9 +43,11 @@ export default Vue.extend({
     ...mapMutations("list", ["addItem"]),
     ...mapActions("list", ["undo", "redo"]),
     postNewTodo() {
-      // @ts-ignore
-      this.addItem({ item: this.newTodo });
-      this.newTodo = "";
+      if (this.newTodo) {
+        // @ts-ignore
+        this.addItem({ item: this.newTodo });
+        this.newTodo = "";
+      }
     },
   }
 });

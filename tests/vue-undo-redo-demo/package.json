@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "register-service-worker": "^1.0.0",
+    "suitcss-components": "^2.0.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
+    "vue-styled-components": "^1.4.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -31,10 +33,12 @@
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-core": "7.0.0-bridge.0",
     "node-sass": "^4.9.0",
+    "postcss-import": "^12.0.1",
     "prettier-stylelint": "^0.4.2",
     "sass-loader": "^7.0.1",
     "stylelint-config-factorial": "^7.1.1",
     "stylelint-selector-bem-pattern": "^2.0.0",
+    "suitcss-preprocessor": "^4.0.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.0.0",
     "vue-template-compiler": "^2.5.17"

@@ -2,13 +2,16 @@
 
 exports[`Todos.vue Should render correctly 1`] = `
 <div>
-  <button
+  <styledbutton-stub
+    class="Button"
+    color="green"
     id="post"
   >
     Add
-  </button>
+  </styledbutton-stub>
    
   <button
+    class="Button"
     disabled="disabled"
     id="undo"
   >
@@ -16,6 +19,7 @@ exports[`Todos.vue Should render correctly 1`] = `
   </button>
    
   <button
+    class="Button"
     disabled="disabled"
     id="redo"
   >
