@@ -1,8 +1,23 @@
 <template>
   <div>
-    <styled-button color="green" class="Button" id="post" @click="$emit('postNewTodo')">Add</styled-button>
-    <button class="Button" id="undo" :disabled="!canUndo" @click="$emit('undo')">Undo</button>
-    <button class="Button" id="redo" :disabled="!canRedo" @click="$emit('redo')">Redo</button>
+    <br>
+    <span>{{ picked }}</span>
+    <br>
+    <input type="radio" id="one" value="Unstyled" v-model="picked">
+    <label for="one">Unstyled</label>
+    <input type="radio" id="two" value="Styled" v-model="picked">
+    <label for="two">Styled</label>
+    <br>
+    <template v-if="picked === 'Unstyled'">
+      <button id="post" @click="$emit('postNewTodo')">Add</button>
+      <button color="secondary" id="undo" :disabled="!canUndo" @click="$emit('undo')">Undo</button>
+      <button color="secondary" id="redo" :disabled="!canRedo" @click="$emit('redo')">Redo</button>
+    </template>
+    <template v-else>
+      <btn class="Button" id="post" @click="$emit('postNewTodo')">Add</btn>
+      <btn class="Button" color="secondary" id="undo" :disabled="!canUndo" @click="$emit('undo')">Undo</btn>
+      <btn class="Button" color="secondary" id="redo" :disabled="!canRedo" @click="$emit('redo')">Redo</btn>
+    </template>
     <h4>{{ label }}</h4>
     <ol>
       <li v-for="(todo, i) in list" :key="i">{{ todo }}</li>
@@ -12,20 +27,11 @@
 
 <script>
 import Vue from "vue";
-import styled from "vue-styled-components";
-
-const VUEJS_GREEN = "rgb(55, 173, 112)"
-const StyledButton = styled("button", { color: String })`
-  border: 2px solid;
-  border-radius: 3px;
-  color: ${({ color }) => color === "green" ? VUEJS_GREEN : ""};
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-`;
+import Btn from "../Btn.styled.js";
+// import Btn from "../Btn";
 
 export default Vue.extend({
-  components: { StyledButton },
+  components: { Btn },
   props: {
     list: {
       type: Array,
@@ -43,6 +49,11 @@ export default Vue.extend({
       type: String,
       required: true
     }
+  },
+  data() {
+    return {
+      picked: "Unstyled"
+    };
   }
-})
+});
 </script>

@@ -1,0 +1,12 @@
+:root {
+  --color-green: rgb(55, 173, 112);
+  --color-blueGreen: rgb(40, 56, 75);
+}
+
+.u-color--green {
+  color: var(--color-green) !important;
+}
+
+.u-color--blueGreen {
+  color: var(--color-blueGreen) !important;
+}
