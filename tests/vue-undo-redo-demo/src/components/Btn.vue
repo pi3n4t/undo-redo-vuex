@@ -4,6 +4,9 @@
 
 <script>
 import Vue from "vue";
+import { getColorProp } from "@/utils/themeColors";
+
+const getColorClass = getColorProp("class");
 
 export default Vue.extend({
   name: "Btn",
@@ -15,12 +18,8 @@ export default Vue.extend({
   },
   computed: {
     colorClass() {
-      if (this.color === "primary") {
-        return "u-color--green";
-      } else if (this.color === "secondary") {
-        return "u-color--blueGreen";
-      }
-      return "";
+      const { color } = this;
+      return getColorClass({ color });
     }
   }
 });

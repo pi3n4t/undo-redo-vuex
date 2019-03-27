@@ -2,16 +2,48 @@
 
 exports[`Todos.vue Should render correctly 1`] = `
 <div>
-  <styledbutton-stub
-    class="Button"
-    color="green"
+  <br />
+   
+  <span>
+    Unstyled
+  </span>
+   
+  <br />
+   
+  <input
+    id="one"
+    type="radio"
+    value="Unstyled"
+  />
+   
+  <label
+    for="one"
+  >
+    Unstyled
+  </label>
+   
+  <input
+    id="two"
+    type="radio"
+    value="Styled"
+  />
+   
+  <label
+    for="two"
+  >
+    Styled
+  </label>
+   
+  <br />
+   
+  <button
     id="post"
   >
     Add
-  </styledbutton-stub>
+  </button>
    
   <button
-    class="Button"
+    color="secondary"
     disabled="disabled"
     id="undo"
   >
@@ -19,7 +51,7 @@ exports[`Todos.vue Should render correctly 1`] = `
   </button>
    
   <button
-    class="Button"
+    color="secondary"
     disabled="disabled"
     id="redo"
   >
