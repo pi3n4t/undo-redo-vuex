@@ -15,8 +15,26 @@
     </template>
     <template v-else>
       <btn class="Button" id="post" @click="$emit('postNewTodo')">Add</btn>
+      
+      <!-- Ideally, styled-components should able to extend elements with attributes (e.g. className):
+      
+      styled.button.attr({
+        className: "Button"
+      })`...css`
+
+       -->
+      
       <btn class="Button" color="secondary" id="undo" :disabled="!canUndo" @click="$emit('undo')">Undo</btn>
       <btn class="Button" color="secondary" id="redo" :disabled="!canRedo" @click="$emit('redo')">Redo</btn>
+      
+      <!-- styled-components could be created to accept themed attributes instead:
+      
+      https://github.com/styled-components/vue-styled-components#theming
+      <theme-provider theme="myTheme">
+        <btn secondary|primary id="redo" ... />
+      </theme-provider>
+      
+       -->
     </template>
     <h4>{{ label }}</h4>
     <ol>
