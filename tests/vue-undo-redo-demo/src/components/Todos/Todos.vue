@@ -18,6 +18,7 @@
       
       <!-- Ideally, styled-components should able to extend elements with attributes (e.g. className):
       
+      !Not supported in vue-styled-components yet
       styled.button.attr({
         className: "Button"
       })`...css`
