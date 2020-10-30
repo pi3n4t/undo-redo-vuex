@@ -5,13 +5,17 @@ import {
   REDO,
   UNDO,
   CLEAR,
-  RESET
+  RESET,
+  RESET_DONE,
+  RESET_UNDONE
 } from "./constants";
 import { getConfig, setConfig, updateCanUndoRedo } from "./utils-undo-redo";
 import execRedo from "./redo";
 import execUndo from "./undo";
 import execClear from "./clear";
 import execReset from "./reset";
+import execResetDone from "./resetDone";
+import execResetUndone from "./resetUndone";
 
 // Logic based on: https://github.com/anthonygore/vuex-undo-redo
 
@@ -20,6 +24,8 @@ export const undo = noop;
 export const redo = noop;
 export const clear = noop;
 export const reset = noop;
+export const resetDone = noop;
+export const resetUndone = noop;
 
 export const scaffoldState = (state: any) => ({
   ...state,
@@ -32,7 +38,9 @@ export const scaffoldActions = (actions: any) => ({
   undo,
   redo,
   clear,
-  reset
+  reset,
+  resetDone,
+  resetUndone
 });
 
 export const scaffoldMutations = (mutations: any) => ({
@@ -165,6 +173,12 @@ export default (options: UndoRedoOptions = {}) => (store: any) => {
         break;
       case `${namespace}${RESET}`:
         await execReset({ paths, store })(namespace);
+        break;
+      case `${namespace}${RESET_DONE}`:
+        await execResetDone({ paths, store })(namespace);
+        break;
+      case `${namespace}${RESET_UNDONE}`:
+        await execResetUndone({ paths, store })(namespace);
         break;
       default:
         break;

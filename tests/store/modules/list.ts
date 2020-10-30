@@ -61,7 +61,13 @@ export const mutations = {
   },
   removeShadow: (state: any, { index }: Payload) => {
     state.shadow.splice(index, 1);
-  }
+  },
+  resetDone: (state: any) => {
+    state.resetList = [...state.list];
+  },
+  resetUndone: (state: any) => {
+    state.resetList = [...state.list];
+  },
 };
 
 export default scaffoldStore({

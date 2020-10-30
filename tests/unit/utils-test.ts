@@ -19,3 +19,13 @@ export const reset = (store: any) => async (namespace: string = "") => {
   await store.dispatch(`${namespace ? `${namespace}/` : ""}reset`);
   await Vue.nextTick();
 };
+
+export const resetDone = (store: any) => async (namespace: string = "") => {
+  await store.dispatch(`${namespace ? `${namespace}/` : ""}resetDone`);
+  await Vue.nextTick();
+};
+
+export const resetUndone = (store: any) => async (namespace: string = "") => {
+  await store.dispatch(`${namespace ? `${namespace}/` : ""}resetUndone`);
+  await Vue.nextTick();
+};
