@@ -7,7 +7,8 @@ import {
   CLEAR,
   RESET,
   RESET_DONE,
-  RESET_UNDONE
+  RESET_UNDONE,
+  UPDATE_UNDO_REDO_CONFIG
 } from "./constants";
 import { getConfig, setConfig, updateCanUndoRedo } from "./utils-undo-redo";
 import execRedo from "./redo";
@@ -26,47 +27,72 @@ export const clear = noop;
 export const reset = noop;
 export const resetDone = noop;
 export const resetUndone = noop;
+export const getUndoRedoConfig = noop;
 
-export const scaffoldState = (state: any) => ({
+export const scaffoldState = (state: any, exposeUndoRedoConfig = false) => ({
   ...state,
   canUndo: false,
-  canRedo: false
+  canRedo: false,
+  ...(exposeUndoRedoConfig
+    ? {
+        undoRedoConfig: {}
+      }
+    : {})
 });
 
-export const scaffoldActions = (actions: any) => ({
+export const scaffoldActions = (
+  actions: any,
+  exposeUndoRedoConfig = false
+) => ({
   ...actions,
   undo,
   redo,
   clear,
   reset,
   resetDone,
-  resetUndone
+  resetUndone,
+  ...(exposeUndoRedoConfig
+    ? {
+        getUndoRedoConfig
+      }
+    : {})
 });
 
-export const scaffoldMutations = (mutations: any) => ({
+export const scaffoldMutations = (
+  mutations: any,
+  exposeUndoRedoConfig = false
+) => ({
   ...mutations,
-  updateCanUndoRedo: (state: any, payload: any) => {
+  [UPDATE_CAN_UNDO_REDO]: (state: any, payload: any) => {
     if (payload.canUndo !== undefined) state.canUndo = payload.canUndo;
     if (payload.canRedo !== undefined) state.canRedo = payload.canRedo;
-  }
+  },
+  [UPDATE_UNDO_REDO_CONFIG]: exposeUndoRedoConfig
+    ? (state: any, { done, undone }: { done: any[]; undone: any[] }) => {
+        state.undoRedoConfig.done = [...done];
+        state.undoRedoConfig.undone = [...undone];
+      }
+    : noop
 });
 
-export const scaffoldStore = (store: any) => ({
+export const scaffoldStore = (store: any, exposeUndoRedoConfig = false) => ({
   ...store,
-  state: scaffoldState(store.state || {}),
-  actions: scaffoldActions(store.actions || {}),
-  mutations: scaffoldMutations(store.mutations || {})
+  state: scaffoldState(store.state || {}, exposeUndoRedoConfig),
+  actions: scaffoldActions(store.actions || {}, exposeUndoRedoConfig),
+  mutations: scaffoldMutations(store.mutations || {}, exposeUndoRedoConfig)
 });
 
 const createPathConfig = ({
   namespace = "",
-  ignoreMutations = []
+  ignoreMutations = [],
+  exposeUndoRedoConfig = false
 }: UndoRedoOptions): UndoRedoOptions => ({
   namespace,
   ignoreMutations,
   done: [],
   undone: [],
-  newMutation: true
+  newMutation: true,
+  exposeUndoRedoConfig
 });
 
 const mapIgnoreMutations = ({
@@ -75,16 +101,20 @@ const mapIgnoreMutations = ({
 }: UndoRedoOptions) => ({
   ignoreMutations: (ignoreMutations || [])
     .map(mutation => `${namespace}/${mutation}`)
-    .concat(`${namespace}/${UPDATE_CAN_UNDO_REDO}`)
+    .concat([
+      `${namespace}/${UPDATE_CAN_UNDO_REDO}`,
+      `${namespace}/${UPDATE_UNDO_REDO_CONFIG}`
+    ])
 });
 
 const mapPaths = (paths: UndoRedoOptions[]) =>
-  paths.map(({ namespace, ignoreMutations }) =>
+  paths.map(({ namespace, ignoreMutations, exposeUndoRedoConfig }) =>
     createPathConfig({
       namespace: `${namespace}/`,
       ...(ignoreMutations
         ? mapIgnoreMutations({ namespace, ignoreMutations })
-        : {})
+        : {}),
+      exposeUndoRedoConfig
     })
   );
 
@@ -122,8 +152,10 @@ export default (options: UndoRedoOptions = {}) => (store: any) => {
         createPathConfig({
           ignoreMutations: [
             ...(options.ignoreMutations || []),
-            UPDATE_CAN_UNDO_REDO
-          ]
+            UPDATE_CAN_UNDO_REDO,
+            UPDATE_UNDO_REDO_CONFIG
+          ],
+          exposeUndoRedoConfig: options.exposeUndoRedoConfig
         })
       ];
 
@@ -135,20 +167,32 @@ export default (options: UndoRedoOptions = {}) => (store: any) => {
     const config = getConfig(paths)(namespace);
 
     if (Object.keys(config).length) {
-      const { ignoreMutations, newMutation, done } = config;
+      const {
+        ignoreMutations,
+        newMutation,
+        done,
+        exposeUndoRedoConfig
+      } = config;
 
       if (
         mutation.type !== `${namespace}${EMPTY_STATE}` &&
         mutation.type !== `${namespace}${UPDATE_CAN_UNDO_REDO}` &&
+        mutation.type !== `${namespace}${UPDATE_UNDO_REDO_CONFIG}` &&
         ignoreMutations.indexOf(mutation.type) === -1 &&
         mutation.type.includes(namespace) &&
         newMutation
       ) {
         done.push(mutation);
-        setConfig(paths)(namespace, {
-          ...config,
-          done
-        });
+
+        setConfig(paths)(
+          namespace,
+          {
+            ...config,
+            done
+          },
+          store
+        );
+
         updateCanUndoRedo({ paths, store })(namespace);
       }
     }
