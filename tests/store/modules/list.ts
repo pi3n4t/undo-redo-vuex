@@ -67,7 +67,7 @@ export const mutations = {
   },
   resetUndone: (state: any) => {
     state.resetList = [...state.list];
-  },
+  }
 };
 
 export default scaffoldStore(

@@ -9,7 +9,7 @@ export default ({
   store: any;
 }) => async (namespace: string) => {
   const config = getConfig(paths)(namespace);
-  
+
   if (Object.keys(config).length) {
     const undone: [] = [];
     config.newMutation = false;
